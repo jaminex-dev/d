@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Ingreso de Material Minero</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Sistema de Ingreso de Material Minero</h1>
+        
+        <!-- Resumen -->
+        <div class="summary">
+            <h3>Resumen</h3>
+            <div id="summaryInfo">
+                <p>Total de registros: <span id="totalRecords">0</span></p>
+            </div>
+        </div>
+        
+        <!-- Formulario para agregar/editar material -->
+        <div class="form-section">
+            <h2>Registro de Material</h2>
+            <form id="materialForm">
+                <div class="form-group">
+                    <label for="tipoMaterial">Tipo de Material:</label>
+                    <select id="tipoMaterial" required>
+                        <option value="">Seleccione un material...</option>
+                        <option value="oro">Oro</option>
+                        <option value="plata">Plata</option>
+                        <option value="cobre">Cobre</option>
+                        <option value="hierro">Hierro</option>
+                        <option value="zinc">Zinc</option>
+                        <option value="plomo">Plomo</option>
+                        <option value="aluminio">Aluminio</option>
+                        <option value="niquel">Níquel</option>
+                        <option value="carbon">Carbón</option>
+                        <option value="bauxita">Bauxita</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="peso">Peso (kg):</label>
+                    <input type="number" id="peso" min="0" step="0.01" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="ubicacion">Ubicación:</label>
+                    <input type="text" id="ubicacion" placeholder="Ej: Mina Norte - Sector A" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="descripcion">Descripción:</label>
+                    <textarea id="descripcion" placeholder="Descripción adicional del material"></textarea>
+                </div>
+                
+                <div class="form-buttons">
+                    <button type="submit" id="submitBtn">Agregar Material</button>
+                    <button type="button" id="cancelBtn" style="display: none;">Cancelar</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Lista de materiales -->
+        <div class="materials-section">
+            <h2>Materiales Registrados</h2>
+            <div class="search-filter">
+                <input type="text" id="searchInput" placeholder="Buscar por tipo de material o ubicación...">
+                <button id="searchBtn">Buscar</button>
+                <button id="clearSearch">Limpiar</button>
+            </div>
+            
+            <div class="table-container">
+                <table id="materialsTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tipo de Material</th>
+                            <th>Peso (kg)</th>
+                            <th>Fecha de Ingreso</th>
+                            <th>Ubicación</th>
+                            <th>Descripción</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="materialsTableBody">
+                        <!-- Los datos se cargarán dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para confirmación de eliminación -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h3>Confirmar Eliminación</h3>
+            <p>¿Está seguro de que desea eliminar este registro?</p>
+            <div class="modal-buttons">
+                <button id="confirmDelete">Sí, Eliminar</button>
+                <button id="cancelDelete">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/db.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
