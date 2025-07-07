@@ -44,6 +44,26 @@ class DatabaseManager {
         }
     }
 
+    // Convertir de camelCase a snake_case para Supabase
+    toSnakeCase(obj) {
+        const converted = {};
+        for (const [key, value] of Object.entries(obj)) {
+            const snakeKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
+            converted[snakeKey] = value;
+        }
+        return converted;
+    }
+
+    // Convertir de snake_case a camelCase para JavaScript
+    toCamelCase(obj) {
+        const converted = {};
+        for (const [key, value] of Object.entries(obj)) {
+            const camelKey = key.replace(/_([a-z])/g, (match, letter) => letter.toUpperCase());
+            converted[camelKey] = value;
+        }
+        return converted;
+    }
+
     // Obtener todos los materiales
     async getMaterials() {
         if (!this.initialized) await this.initialize();
@@ -62,7 +82,8 @@ class DatabaseManager {
 
             if (response.ok) {
                 const materials = await response.json();
-                return materials;
+                // Convertir snake_case a camelCase
+                return materials.map(material => this.toCamelCase(material));
             } else {
                 throw new Error('Error al obtener materiales');
             }
@@ -81,6 +102,9 @@ class DatabaseManager {
         }
 
         try {
+            // Convertir camelCase a snake_case para Supabase
+            const snakeCaseMaterial = this.toSnakeCase(material);
+            
             const response = await fetch(`${this.supabaseUrl}/rest/v1/${this.tableName}`, {
                 method: 'POST',
                 headers: {
@@ -89,12 +113,13 @@ class DatabaseManager {
                     'Content-Type': 'application/json',
                     'Prefer': 'return=representation'
                 },
-                body: JSON.stringify(material)
+                body: JSON.stringify(snakeCaseMaterial)
             });
 
             if (response.ok) {
                 const newMaterial = await response.json();
-                return newMaterial[0];
+                // Convertir la respuesta de vuelta a camelCase
+                return this.toCamelCase(newMaterial[0]);
             } else {
                 throw new Error('Error al agregar material');
             }
@@ -113,6 +138,9 @@ class DatabaseManager {
         }
 
         try {
+            // Convertir camelCase a snake_case para Supabase
+            const snakeCaseMaterial = this.toSnakeCase(material);
+            
             const response = await fetch(`${this.supabaseUrl}/rest/v1/${this.tableName}?id=eq.${id}`, {
                 method: 'PATCH',
                 headers: {
@@ -121,12 +149,13 @@ class DatabaseManager {
                     'Content-Type': 'application/json',
                     'Prefer': 'return=representation'
                 },
-                body: JSON.stringify(material)
+                body: JSON.stringify(snakeCaseMaterial)
             });
 
             if (response.ok) {
                 const updatedMaterial = await response.json();
-                return updatedMaterial[0];
+                // Convertir la respuesta de vuelta a camelCase
+                return this.toCamelCase(updatedMaterial[0]);
             } else {
                 throw new Error('Error al actualizar material');
             }
@@ -281,34 +310,4 @@ class DatabaseManager {
 // Exportar para uso en otros archivos
 window.DatabaseManager = DatabaseManager;
 
-// Instrucciones de configuración
-console.log(`
-=== CONFIGURACIÓN DE BASE DE DATOS SUPABASE ===
 
-1. Crear cuenta en https://supabase.com
-2. Crear nuevo proyecto
-3. Ir a Settings > API
-4. Copiar URL y anon key
-5. Reemplazar en este archivo:
-   - TU_SUPABASE_URL
-   - TU_SUPABASE_ANON_KEY
-
-6. Crear tabla 'materiales_mineros' con SQL:
-
-CREATE TABLE materiales_mineros (
-    id BIGSERIAL PRIMARY KEY,
-    tipo_material VARCHAR(50) NOT NULL,
-    peso DECIMAL(10,2) NOT NULL,
-    fecha_ingreso DATE NOT NULL,
-    ubicacion VARCHAR(255) NOT NULL,
-    descripcion TEXT,
-    fecha_registro TIMESTAMP DEFAULT NOW(),
-    fecha_modificacion TIMESTAMP
-);
-
-7. Habilitar Row Level Security (RLS):
-   - Ir a Authentication > Policies
-   - Crear política para permitir operaciones públicas
-
-Sin configuración, el sistema usará localStorage como respaldo.
-`);

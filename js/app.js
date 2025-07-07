@@ -223,7 +223,7 @@ class MaterialMineroSystem {
         tbody.innerHTML = '';
         
         if (materials.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #666;">No hay materiales registrados</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #666;">No hay materiales registrados</td></tr>';
             return;
         }
 
