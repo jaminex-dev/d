@@ -119,8 +119,10 @@ class MaterialMineroSystem {
         const result = await this.db.addMaterial(data);
         if (result) {
             this.showMessage('Material agregado exitosamente', 'success');
+            return true;
         } else {
             this.showMessage('Error al agregar material', 'error');
+            throw new Error('Error al agregar material');
         }
     }
 
@@ -129,8 +131,10 @@ class MaterialMineroSystem {
         const result = await this.db.updateMaterial(this.currentEditId, data);
         if (result) {
             this.showMessage('Material actualizado exitosamente', 'success');
+            return true;
         } else {
             this.showMessage('Error al actualizar material', 'error');
+            throw new Error('Error al actualizar material');
         }
     }
 

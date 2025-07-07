@@ -147,7 +147,7 @@ class DatabaseManager {
                     'Content-Type': 'application/json',
                     'Prefer': 'return=representation'
                 },
-                body: JSON.stringify(material)
+                body: JSON.stringify(snakeCaseMaterial)
             });
 
             if (response.ok) {
