@@ -82,7 +82,6 @@ class DatabaseManager {
 
             if (response.ok) {
                 const materials = await response.json();
-                // Convertir snake_case a camelCase
                 return materials.map(material => this.toCamelCase(material));
             } else {
                 throw new Error('Error al obtener materiales');
@@ -138,7 +137,6 @@ class DatabaseManager {
         }
 
         try {
-            // Convertir camelCase a snake_case para Supabase
             const snakeCaseMaterial = this.toSnakeCase(material);
             
             const response = await fetch(`${this.supabaseUrl}/rest/v1/${this.tableName}?id=eq.${id}`, {
@@ -149,7 +147,7 @@ class DatabaseManager {
                     'Content-Type': 'application/json',
                     'Prefer': 'return=representation'
                 },
-                body: JSON.stringify(snakeCaseMaterial)
+                body: JSON.stringify(material)
             });
 
             if (response.ok) {
