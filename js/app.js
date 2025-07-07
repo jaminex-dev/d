@@ -1,14 +1,16 @@
-// Sistema de Gestión de Materiales Mineros - Versión Simplificada
+// Sistema de Gestión de Materiales Mineros
 class MaterialMineroSystem {
     constructor() {
         this.materials = [];
         this.currentEditId = null;
         this.db = new DatabaseManager();
+        this.externalAPIs = new ExternalAPIs();
         this.init();
     }
 
     async init() {
         await this.db.initialize();
+        await this.externalAPIs.initialize(); // Cargar APIs externas
         this.setupEventListeners();
         await this.loadMaterials();
         this.renderTable();
@@ -87,11 +89,14 @@ class MaterialMineroSystem {
 
     // Obtener datos del formulario
     getFormData() {
+        const tipoMaterialValue = document.getElementById('tipoMaterial').value;
+        const ubicacionValue = document.getElementById('ubicacion').value;
+        
         return {
-            tipoMaterial: document.getElementById('tipoMaterial').value,
+            tipoMaterial: tipoMaterialValue,
             peso: parseFloat(document.getElementById('peso').value),
             fechaIngreso: new Date().toISOString().split('T')[0], // Fecha actual automática
-            ubicacion: document.getElementById('ubicacion').value,
+            ubicacion: ubicacionValue,
             descripcion: document.getElementById('descripcion').value
         };
     }
@@ -229,12 +234,17 @@ class MaterialMineroSystem {
 
         materials.forEach(material => {
             const row = document.createElement('tr');
+            
+            // Obtener nombres legibles de las APIs
+            const materialName = this.externalAPIs.getMaterialName(material.tipoMaterial) || this.capitalizeFirst(material.tipoMaterial);
+            const locationName = this.externalAPIs.getLocationName(material.ubicacion) || material.ubicacion;
+            
             row.innerHTML = `
                 <td>${material.id}</td>
-                <td>${this.capitalizeFirst(material.tipoMaterial)}</td>
+                <td>${materialName}</td>
                 <td>${material.peso.toFixed(2)}</td>
                 <td>${this.formatDate(material.fechaIngreso)}</td>
-                <td>${material.ubicacion}</td>
+                <td>${locationName}</td>
                 <td>${material.descripcion || '-'}</td>
                 <td class="actions">
                     <button class="edit-btn" onclick="materialSystem.editMaterial(${material.id})">

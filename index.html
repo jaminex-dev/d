@@ -26,17 +26,7 @@
                 <div class="form-group">
                     <label for="tipoMaterial">Tipo de Material:</label>
                     <select id="tipoMaterial" required>
-                        <option value="">Seleccione un material...</option>
-                        <option value="oro">Oro</option>
-                        <option value="plata">Plata</option>
-                        <option value="cobre">Cobre</option>
-                        <option value="hierro">Hierro</option>
-                        <option value="zinc">Zinc</option>
-                        <option value="plomo">Plomo</option>
-                        <option value="aluminio">Aluminio</option>
-                        <option value="niquel">Níquel</option>
-                        <option value="carbon">Carbón</option>
-                        <option value="bauxita">Bauxita</option>
+                        <option value="">Cargando materiales...</option>
                     </select>
                 </div>
                 
@@ -47,7 +37,9 @@
                 
                 <div class="form-group">
                     <label for="ubicacion">Ubicación:</label>
-                    <input type="text" id="ubicacion" placeholder="Ej: Mina Norte - Sector A" required>
+                    <select id="ubicacion" required>
+                        <option value="">Cargando ubicaciones...</option>
+                    </select>
                 </div>
                 
                 <div class="form-group">
@@ -104,6 +96,7 @@
         </div>
     </div>
     
+    <script src="js/external-apis.js"></script>
     <script src="js/db.js"></script>
     <script src="js/app.js"></script>
 </body>
